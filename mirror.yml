@@ -1,0 +1,78 @@
+name: ninja
+target:
+  registry: ocx.sh
+  repository: ninja
+
+source:
+  type: github_release
+  owner: ninja-build
+  repo: ninja
+  tag_pattern: "^v(?P<version>\\d+\\.\\d+\\.\\d+)$"
+
+# Pass 1 — Linux only. darwin/windows staged below for Pass 2/3.
+assets:
+  linux/amd64:
+    - "^ninja-linux\\.zip$"
+  linux/arm64:
+    - "^ninja-linux-aarch64\\.zip$"
+  # ninja-mac.zip is a Mach-O universal binary (x86_64 + arm64) — the
+  # same asset maps to both darwin platforms.
+  darwin/amd64:
+    - "^ninja-mac\\.zip$"
+  darwin/arm64:
+    - "^ninja-mac\\.zip$"
+  # windows/amd64:
+  #   - "^ninja-win\\.zip$"
+  # windows/arm64:
+  #   - "^ninja-winarm64\\.zip$"
+
+asset_type:
+  type: archive
+  strip_components: 0   # single ninja / ninja.exe sits at the zip root on every platform
+
+metadata:
+  default: metadata.json
+
+skip_prereleases: true
+cascade: true
+build_timestamp: none
+
+versions:
+  min: "1.12.0"
+  new_per_run: 5
+  poll_interval: "0 */6 * * *"
+
+verify:
+  github_asset_digest: true
+
+concurrency:
+  max_downloads: 8
+  max_bundles: 4
+  max_pushes: 2
+  rate_limit_ms: 100
+  max_retries: 3
+  compression_threads: 0
+
+tests:
+  - name: smoke
+    script: tests/smoke.star
+
+platforms:
+  linux/amd64:
+    runner: ubuntu-latest
+  linux/arm64:
+    runner: ubuntu-24.04-arm
+  darwin/amd64:
+    runner: macos-13
+  darwin/arm64:
+    runner: macos-14
+  # windows/amd64:
+  #   runner: windows-latest
+  #   shell: pwsh
+  # windows/arm64:
+  #   runner: windows-11-arm
+  #   shell: pwsh
+
+notify:
+  discord:
+    webhook_secret: OCX_MIRROR_DISCORD_HOOK
