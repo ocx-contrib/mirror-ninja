@@ -21,10 +21,10 @@ assets:
     - "^ninja-mac\\.zip$"
   darwin/arm64:
     - "^ninja-mac\\.zip$"
-  # windows/amd64:
-  #   - "^ninja-win\\.zip$"
-  # windows/arm64:
-  #   - "^ninja-winarm64\\.zip$"
+  windows/amd64:
+    - "^ninja-win\\.zip$"
+  windows/arm64:
+    - "^ninja-winarm64\\.zip$"
 
 asset_type:
   type: archive
@@ -68,12 +68,12 @@ platforms:
     runner: macos-14
   darwin/arm64:
     runner: macos-14
-  # windows/amd64:
-  #   runner: windows-latest
-  #   shell: pwsh
-  # windows/arm64:
-  #   runner: windows-11-arm
-  #   shell: pwsh
+  windows/amd64:
+    runner: windows-latest
+    shell: pwsh
+  windows/arm64:
+    runner: windows-11-arm
+    shell: pwsh
 
 notify:
   discord:
